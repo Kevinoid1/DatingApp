@@ -26,6 +26,7 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { appRoutes } from './routes';
 import { PhotoEditComponent } from './members/photo-edit/photo-edit.component';
+import { ButtonsModule, PaginationModule } from 'ngx-bootstrap';
 
 export function tokenGetter(){
   return localStorage.getItem('token');
@@ -69,7 +70,9 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     }),
     TabsModule.forRoot(),
     NgxGalleryModule,
-    FileUploadModule
+    FileUploadModule,
+    PaginationModule.forRoot(),
+    ButtonsModule.forRoot()
     // RouterModule.forRoot([
     //   { path: '', component: HomeComponent, pathMatch: 'full' },
     //   { path: 'counter', component: CounterComponent },

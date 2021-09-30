@@ -1,4 +1,5 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.Helpers;
+using DatingApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace DatingApp.Repositories
 {
     public interface IDatingRepository
     {
-        Task<IEnumerable<User>> GetAllUsers();
+        Task<PagedList<User>> GetAllUsers(UserParams userParams);
 
         Task<User> GetUser(int Id);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,8 @@ namespace DatingApp.Models
 
         public string Country { get; set; }
         public ICollection<Photo> Photos { get; set; }
+
+        
 
     }
 }
