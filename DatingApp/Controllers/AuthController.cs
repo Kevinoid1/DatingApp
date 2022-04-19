@@ -2,6 +2,7 @@
 using DatingApp.DTOs;
 using DatingApp.Models;
 using DatingApp.Repositories.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -53,6 +54,8 @@ namespace DatingApp.Controllers
             var userFromRepo = await _repo.Login(userLoginDto);
             if (userFromRepo == null)
                 return Unauthorized();
+            //3 steps to create a token
+            //1) create token payload using a token descriptor            
             //populate payload of token
             var claims = new[]
             {
@@ -72,12 +75,20 @@ namespace DatingApp.Controllers
                 SigningCredentials = credentials
             };
 
+            //2)create a token handler to create the token string from the token descriptor
             //create a Json Web Token (JWT)
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            //returning a token and user object to the client
+            //3)returning a token and user object to the client
             var userReturned = _mapper.Map<UserForListDto>(userFromRepo);
+
+            //sending the token as a cookie to the client. The cookie will be automatically saved by the client
+            HttpContext.Response.Cookies.Append("jwt", tokenHandler.WriteToken(token), new CookieOptions 
+            {
+                HttpOnly = true, //this option makes the cookie not to be editable by the client
+                Expires = DateTime.Now.AddDays(1)
+            });
             return Ok(new
             {
                 token = tokenHandler.WriteToken(token),

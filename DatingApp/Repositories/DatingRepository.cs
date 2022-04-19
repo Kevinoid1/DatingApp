@@ -75,6 +75,29 @@ namespace DatingApp.Repositories
 
         public async Task<Photo> GetCurrentMainUserPhoto(int userId)
         {
+            //var group = 1;
+            //var b = new List<int>() { 5, 10, 15, 20, 45, 50, 55, 80, 85, 100 };
+
+            //var res = b.Select((s, index) => new
+            //{
+            //    prior = index == 0 ? s : b[index - 1],
+            //    item = s
+            //}).GroupBy(f => (f.item - f.prior) <= 5 ? group : ++group, f => f.item);//grouping is simple
+            //here what they do is that the groupby function returns IGrouping<TKey,V> and has 8 overloads
+            //in this case we use the overload that selects key and items;
+            //the key can be a constant, which means that the group key name will be named the constant or the key can be a field of the object
+            //and the name will be the type of the field. So basically, it selects the group key and starts to select items for that group key as one group
+            // if the group key changes, it closes the first group and starts to select items for the second group as the second group key name
+            //and it continues like that till it is completed.
+
+            //result of the group by for this list based on the code above is
+            /*group key         output
+             *  1             5,10,15,20
+             *  2             45, 50, 55
+             *  3             80, 85
+             *  4             100
+             */
+
             return await _context.Photos.Where(p => p.UserId == userId).FirstOrDefaultAsync(p => p.IsMain);
         }
     }

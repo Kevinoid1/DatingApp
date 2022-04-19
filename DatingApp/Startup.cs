@@ -76,6 +76,8 @@ namespace DatingApp
                         var error = context.Features.Get<IExceptionHandlerFeature>();
                         if (error != null)
                         {
+                            //if (error.Error is MyCoolException ex) { int code = ex.Baba; }
+                           // await context.Response.WriteAsJsonAsync(new { success = false, message = error.Error.Message });
                             context.Response.AddApplicationErrors(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message);
                         }
@@ -110,6 +112,7 @@ namespace DatingApp
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
                 spa.Options.SourcePath = "ClientApp";
+                spa.Options.DevServerPort = 4800;
 
                 if (env.IsDevelopment())
                 {
