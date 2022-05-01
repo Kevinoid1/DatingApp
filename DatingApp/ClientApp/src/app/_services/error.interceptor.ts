@@ -6,8 +6,10 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        //intercept the response
         return next.handle(req).pipe(
             catchError(error => {
+                //handle unauthorizederror
                 if (error.status === 401){
                     return throwError(error.statusText);
                 }
@@ -31,5 +33,5 @@ export class ErrorInterceptor implements HttpInterceptor {
 export const ErrorInterceptorProvider = {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptor,
-    multi: true
+    multi: true //not to overide but to add to the http interceptors that came with angular
 }

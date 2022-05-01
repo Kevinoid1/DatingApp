@@ -1,9 +1,10 @@
+import { AccountService } from './../_services/account.service';
 import { AlertifyService } from './../_services/alertify.service';
 import { Component, OnInit } from '@angular/core';
 
 
-import { AuthService } from './../_services/auth.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 
 
@@ -15,15 +16,19 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
   model:any = {};
   photoUrl: string;
+  isLoggedIn: boolean = false; // angular will initialize boolean variables to default values of false. I just did this here because i like it this way
   
-  constructor(public authService: AuthService, private alertify:AlertifyService, private router: Router) { }
+  constructor(
+     private alertify:AlertifyService, 
+     private router: Router,
+     public accountService: AccountService) { }
 
   ngOnInit() {
-    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
+    this.accountService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login(){
-    this.authService.login(this.model).subscribe(()=>{
+    this.accountService.login(this.model).subscribe(()=>{
       //console.log(this.authService.decodedToken);
       this.alertify.success("Logged in successfully");
     }, error =>{
@@ -34,17 +39,24 @@ export class NavComponent implements OnInit {
   }
 
   loggedIn(){
-    return this.authService.loggedIn();
+    return this.accountService.loggedIn();
   }
 
   logout(){
-    localStorage.removeItem('token');
-    localStorage.removeItem('userReturned');
-    this.authService.decodedToken = null;
-    this.authService.currentUser = null;
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('userReturned');
+    this.accountService.logout();
+    this.accountService.decodedToken = null;
+    //this.accountService.setCurrentUser(null);
     this.alertify.message("Logged out");
     this.router.navigate(['/']);
     
+  }
+
+  getCurrentUser(){
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+      this.isLoggedIn = !!user; //the double exclamation mark turns an object to a boolean. Take note
+    })
   }
 
 }

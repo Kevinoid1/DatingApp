@@ -1,4 +1,4 @@
-import { AuthService } from './../../_services/auth.service';
+import { AccountService } from './../../_services/account.service';
 import { UserService } from './../../_services/user.service';
 import { AlertifyService } from './../../_services/alertify.service';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
@@ -21,20 +21,20 @@ export class MemberEditComponent implements OnInit {
       $event.returnValue = true;
   }
   constructor(private router:ActivatedRoute, private alertify:AlertifyService,
-    private userService:UserService, private authService:AuthService) { }
+    private userService:UserService, private accountService: AccountService) { }
 
   ngOnInit() {
     this.router.data.subscribe(data =>{
       this.user = data['user'];
       
     })
-    this.authService.currentPhotoUrl.subscribe(photoUrl =>{
+    this.accountService.currentPhotoUrl.subscribe(photoUrl =>{
       this.photoUrl = photoUrl;
     })
   }
 
   updateUser(){
-   this.userService.updateUser(this.authService.decodedToken.nameid, this.user).subscribe(next =>{
+   this.userService.updateUser(this.accountService.decodedToken.nameid, this.user).subscribe(next =>{
     this.alertify.success("Profile Updated Successfully");
     this.editForm.reset(this.user);
    },error =>{

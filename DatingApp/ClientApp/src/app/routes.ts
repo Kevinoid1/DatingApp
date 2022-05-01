@@ -11,6 +11,7 @@ import { MembersListComponent } from './members/members-list/members-list.compon
 import { HomeComponent } from './home/home.component';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { ErrorTesterComponent } from './error-tester/error-tester.component';
 
 
 export const appRoutes: Routes = [
@@ -29,7 +30,7 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always'
     
     },
-    
+    {path: 'errors', component: ErrorTesterComponent},
     {path: '**', redirectTo:'', pathMatch:'full'}
     
 ]

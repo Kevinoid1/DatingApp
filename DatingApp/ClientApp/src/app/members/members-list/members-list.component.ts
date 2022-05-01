@@ -13,7 +13,7 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 })
 export class MembersListComponent implements OnInit {
   users: User[];
-  user: User = JSON.parse(localStorage.getItem('userReturned'));
+  user: User = JSON.parse(localStorage.getItem('user')).userReturned;
   userParams:any = {};
   genderValues = [{value:"male", displayName:"Males"},{value:"female", displayName:"Females"}]
   pagination: Pagination;

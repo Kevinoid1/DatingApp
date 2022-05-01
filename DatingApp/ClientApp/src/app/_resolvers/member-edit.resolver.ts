@@ -1,4 +1,4 @@
-import { AuthService } from './../_services/auth.service';
+import { AccountService } from './../_services/account.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { UserService } from '../_services/user.service';
 import { User } from 'src/app/_models/user';
@@ -12,10 +12,10 @@ import { catchError } from 'rxjs/operators';
 export class MemberEditResolver implements Resolve<User>{
 
     constructor(private userService:UserService, private alertify: AlertifyService, 
-        private router: Router, private authService: AuthService){}
+        private router: Router, private accountService: AccountService){}
 
     resolve(route: ActivatedRouteSnapshot): Observable<User>{
-        return this.userService.getUser(+(this.authService.decodedToken.nameid)).pipe(
+        return this.userService.getUser(+(this.accountService.decodedToken.nameid)).pipe(
             catchError(error =>{
                 this.alertify.error("A problem occured trying to retrieve the User!");
                 this.router.navigate(['/members']);

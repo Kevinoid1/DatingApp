@@ -1,13 +1,17 @@
+import { DateInputComponent } from './_formComponents/date-input/date-input.component';
+import { TextInputComponent } from './_formComponents/text-input/text-input.component';
+import { LoadingInterceptorProvider } from './_services/loading.interceptor';
+import { SharedModule } from './modules/shared/shared.module';
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+ import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { NgxGalleryModule } from 'ngx-gallery';
-import { FileUploadModule } from 'ng2-file-upload';
+// import { TabsModule } from 'ngx-bootstrap/tabs';
+// import { NgxGalleryModule } from 'ngx-gallery';
+// import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -26,10 +30,15 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { appRoutes } from './routes';
 import { PhotoEditComponent } from './members/photo-edit/photo-edit.component';
-import { ButtonsModule, PaginationModule } from 'ngx-bootstrap';
+//import { ButtonsModule, PaginationModule } from 'ngx-bootstrap';
+import { ErrorTesterComponent } from './error-tester/error-tester.component';
 
 export function tokenGetter(){
-  return localStorage.getItem('token');
+  const userAndToken = JSON.parse(localStorage.getItem('user'));
+  if(userAndToken)
+    return userAndToken.token;
+
+  return null;
 }
 
 export class CustomHammerConfig extends HammerGestureConfig  {
@@ -52,15 +61,19 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
-      PhotoEditComponent
+      PhotoEditComponent,
+      ErrorTesterComponent,
+      TextInputComponent,
+      DateInputComponent
       
    ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    RouterModule.forRoot(appRoutes),
+    SharedModule,
     HttpClientModule,
     FormsModule,
-    BsDropdownModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule,
     JwtModule.forRoot({
       config:{
         tokenGetter: tokenGetter,
@@ -68,11 +81,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
         disallowedRoutes:['https://localhost:44315/api/auth']
       }
     }),
-    TabsModule.forRoot(),
-    NgxGalleryModule,
-    FileUploadModule,
-    PaginationModule.forRoot(),
-    ButtonsModule.forRoot()
+
+    
     // RouterModule.forRoot([
     //   { path: '', component: HomeComponent, pathMatch: 'full' },
     //   { path: 'counter', component: CounterComponent },
@@ -80,12 +90,18 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     // ])
   ],
   providers: [
+    //interceptors
     ErrorInterceptorProvider,
+    LoadingInterceptorProvider,
+
+    //resolvers
     MemberDetailResolver,
     MemberListResolver,
-    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
     MemberEditResolver,
-    PreventUnsavedChanges
+
+    //config fix for ngx bootstrap bug
+    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
+
   ],
   bootstrap: [AppComponent]
 })
