@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DatingApp.Middleware;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -36,6 +38,12 @@ namespace DatingApp.Helpers
             response.Headers.Add("Pagination", JsonConvert.SerializeObject(pagination, camelcaseFormatter));
             //adding this line to prevent cors error
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+        }
+
+
+        public static void UseExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionMiddleware>();
         }
     }
 }
