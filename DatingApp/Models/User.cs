@@ -30,8 +30,10 @@ namespace DatingApp.Models
 
         public string Country { get; set; }
         public ICollection<Photo> Photos { get; set; }
+        public ICollection<UserLike> LikedByLoggedInUser { get; set; }
+        public ICollection<UserLike> UsersThatLikedLoggedInUser { get; set; }
 
-        
+
 
     }
 }

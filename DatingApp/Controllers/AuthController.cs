@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DatingApp.DTOs;
+using DatingApp.Helpers;
 using DatingApp.Models;
 using DatingApp.Repositories.Auth;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace DatingApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(LogUserLastActive))]
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _repo;
@@ -36,11 +38,12 @@ namespace DatingApp.Controllers
         {
             if(!await _repo.UserExists(user.Username))
             {
-                var userCreate = new User()
-                {
-                    Username = user.Username.ToLower()
+                var userCreate = new User();
+                //{
+                //    Username = user.Username.ToLower()
 
-                };
+                //};
+                _mapper.Map(user, userCreate);
               var createdUser =  await _repo.Register(userCreate, user.Password);
                 return StatusCode(201); 
             }

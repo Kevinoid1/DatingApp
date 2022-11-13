@@ -19,6 +19,7 @@ namespace DatingApp.Controllers
     [Authorize]
     [ApiController]
     [Route("api/user/{userId}/photos")]
+    [ServiceFilter(typeof(LogUserLastActive))]
     public class PhotosController : ControllerBase
     {
         private readonly IDatingRepository _repo;

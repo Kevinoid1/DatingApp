@@ -2,16 +2,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BsDropdownModule, ButtonsModule, PaginationModule, TabsModule } from 'ngx-bootstrap';
-import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TimeagoModule } from 'ngx-timeago';
 
 
 
 @NgModule({
   declarations: [],
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
@@ -20,18 +23,21 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     PaginationModule.forRoot(),
     ButtonsModule.forRoot(),
     NgxSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
+    TimeagoModule.forRoot()
     
   ],
   exports:[
     BsDropdownModule,
-    JwtModule,
     TabsModule,
     NgxGalleryModule,
     FileUploadModule,
     PaginationModule,
     ButtonsModule,
     NgxSpinnerModule,
+    BsDatepickerModule,
+    TimeagoModule
   ]
 })
 export class SharedModule { }

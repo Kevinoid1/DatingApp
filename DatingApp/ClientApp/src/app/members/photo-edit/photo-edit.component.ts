@@ -81,8 +81,6 @@ export class PhotoEditComponent implements OnInit {
           //the way i did any to any communication
           // this.authService.currentUser.photoUrl = photo.url
           // localStorage.setItem('userReturned', JSON.stringify(this.authService.currentUser));
-      }, error =>{
-        this.alertify.error("Failed to update your profile picture");
       }
     )
   }
@@ -92,9 +90,6 @@ export class PhotoEditComponent implements OnInit {
       this.userService.deletePhoto(this.user.id, id).subscribe(()=>{
           this.photos.splice(this.photos.findIndex( p => p.id == id), 1);
           this.alertify.success("Photo was deleted successfully")
-      }, error =>{
-
-        this.alertify.error("Photo could not be deleted")
       })
     })
     

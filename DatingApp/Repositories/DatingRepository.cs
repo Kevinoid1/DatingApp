@@ -41,6 +41,7 @@ namespace DatingApp.Repositories
 
             if(userParams.MinAge != 18 || userParams.MaxAge != 99)
             {
+                var testdob = DateTime.Today.AddYears(-userParams.MaxAge);
                 var minDOb = DateTime.Today.AddYears(-userParams.MaxAge-1);
                 var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
 
@@ -76,6 +77,11 @@ namespace DatingApp.Repositories
         public async Task<Photo> GetCurrentMainUserPhoto(int userId)
         {
             return await _context.Photos.Where(p => p.UserId == userId).FirstOrDefaultAsync(p => p.IsMain);
+        }
+
+        public async Task<User> GetUser(string username)
+        {
+            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Username == username);
         }
     }
 }

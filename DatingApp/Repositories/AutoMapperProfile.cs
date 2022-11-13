@@ -21,6 +21,8 @@ namespace DatingApp.Repositories
                 .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url));
             CreateMap<Photo, PhotoDetailedDto>();
 
+            CreateMap<UserRegisterDto, User>().ReverseMap();
+
             CreateMap<UserForUpdateDto, User>();
 
             CreateMap<PhotoForCreationDto, Photo>();

@@ -1,3 +1,5 @@
+import { ServerErrorComponent } from './server-error/server-error.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes-guard';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
@@ -31,6 +33,8 @@ export const appRoutes: Routes = [
     
     },
     {path: 'errors', component: ErrorTesterComponent},
-    {path: '**', redirectTo:'', pathMatch:'full'}
+    {path: 'not-found', component:NotFoundComponent},
+    {path:'server-error', component:ServerErrorComponent},
+    {path: '**', redirectTo:'/not-found', pathMatch:'full'}
     
 ]

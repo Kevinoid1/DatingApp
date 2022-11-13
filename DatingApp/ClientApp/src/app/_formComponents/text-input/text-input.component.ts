@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, OnInit, Self } from '@angular/core';
+import { Component, forwardRef, Injector, Input, OnInit, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TypeaheadOptions } from 'ngx-bootstrap';
 
 // export const textValueAccessor = {
 //   provide : NG_VALUE_ACCESSOR,

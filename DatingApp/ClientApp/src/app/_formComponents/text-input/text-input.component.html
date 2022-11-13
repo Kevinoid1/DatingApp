@@ -3,7 +3,16 @@
     [class.is-invalid]="ngControl.touched && ngControl.invalid"
      [placeholder]="placeholder" [name]="name" autocomplete="off"
      [formControl]="ngControl.control">
-</div>
-<div class="invalid-feedback" *ngIf="ngControl.control.errors?.required">
-    {{name}} is required
+     <div class="invalid-feedback" *ngIf="ngControl.control?.errors?.required">
+        {{name}} is required
+    </div>
+    <div class="invalid-feedback" *ngIf="ngControl.control?.errors?.minlength">
+        {{name}} must be at least {{ngControl.control.errors.minlength['requiredLength'] }} characters
+    </div>
+    <div class="invalid-feedback" *ngIf="ngControl.control?.errors?.maxlength">
+        {{name}} must be at most {{ngControl.control.errors.maxlength['requiredLength'] }} characters
+    </div>
+    <div class="invalid-feedback" *ngIf="ngControl.control?.errors?.doesNotMatch">
+        Passwords provided does not match
+    </div>
 </div>

@@ -34,6 +34,8 @@ namespace DatingApp
             services.AddDbContext<DatingAppContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
+            services.AddScoped<LogUserLastActive>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(IDatingRepository).Assembly);
             services.AddCors();

@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
  import { RouterModule } from '@angular/router';
-import { JwtModule } from '@auth0/angular-jwt';
 // import { TabsModule } from 'ngx-bootstrap/tabs';
 // import { NgxGalleryModule } from 'ngx-gallery';
 // import { FileUploadModule } from 'ng2-file-upload';
@@ -32,6 +31,9 @@ import { appRoutes } from './routes';
 import { PhotoEditComponent } from './members/photo-edit/photo-edit.component';
 //import { ButtonsModule, PaginationModule } from 'ngx-bootstrap';
 import { ErrorTesterComponent } from './error-tester/error-tester.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ServerErrorComponent } from './server-error/server-error.component';
 
 export function tokenGetter(){
   const userAndToken = JSON.parse(localStorage.getItem('user'));
@@ -64,7 +66,9 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       PhotoEditComponent,
       ErrorTesterComponent,
       TextInputComponent,
-      DateInputComponent
+      DateInputComponent,
+      NotFoundComponent,
+      ServerErrorComponent
       
    ],
   imports: [

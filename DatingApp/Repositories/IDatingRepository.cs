@@ -24,5 +24,6 @@ namespace DatingApp.Repositories
         Task<Photo> GetPhoto(int id);
 
         Task<Photo> GetCurrentMainUserPhoto(int userId);
+        Task<User> GetUser(string username);
     }
 }

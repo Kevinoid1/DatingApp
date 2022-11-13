@@ -1,0 +1,12 @@
+.not-found{
+    font-size: 4rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.link{
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
