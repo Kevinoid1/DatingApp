@@ -12,6 +12,7 @@ namespace DatingApp.Repositories
         Task<PagedList<User>> GetAllUsers(UserParams userParams);
 
         Task<User> GetUser(int Id);
+        Task<User> GetUserByUsernameAsync(string username);
 
         void Create<T>(T Entity) where T: class;
 

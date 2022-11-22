@@ -34,6 +34,7 @@ import { ErrorTesterComponent } from './error-tester/error-tester.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 
 export function tokenGetter(){
   const userAndToken = JSON.parse(localStorage.getItem('user'));
@@ -68,7 +69,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       TextInputComponent,
       DateInputComponent,
       NotFoundComponent,
-      ServerErrorComponent
+      ServerErrorComponent,
+      MemberMessagesComponent
       
    ],
   imports: [

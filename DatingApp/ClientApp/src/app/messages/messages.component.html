@@ -1,3 +1,40 @@
-<p>
-  messages works!
-</p>
+<div class="box-wrapper mt-5">
+  <ng-container *ngIf="messages?.length > 0; else noMessage">
+    <div class="outer-wrapper">
+    <div class="wrapper" *ngFor="let message of messages; let i = index"
+        routerLink="/members/{{message.recipientId === userId ? message.senderId : message.recipientId}}"
+        [queryParams]="{tab: 3}">
+      <div class="user-image">
+        <div>
+          <img *ngIf="message.recipientId === userId" src="{{message.senderPhotoUrl || './assets/user.png'}}" alt="{{message.recipientUsername}}">
+          <img *ngIf="message.senderId === userId" src="{{message.recipientPhotoUrl || './assets/user.png'}}" alt="{{message.recipientUsername}}">
+        </div>
+      </div>
+      <div class="other-content-wrapper" [ngClass]="{'borderClass': (messages.length) !== index }">
+        <div class="message-text">
+          <p [ngClass]="{'sent': message.senderId === userId,
+                          'received' : message.dateRead !== null}">
+          {{message.content}}
+        </p>
+          </div>
+          <div class="message-count-wrapper">
+            {{message.dateSent | timeago}}
+            <span *ngIf="message.unreadMessageCount > 0">
+              {{message.unreadMessageCount}}
+            </span>
+          </div>
+      </div>
+    </div>
+    </div>
+  </ng-container>
+  
+
+  <ng-template #noMessage>
+    <p class="outer-wrapper">No messages yet!😊</p>
+  </ng-template>
+</div>
+
+
+
+
+

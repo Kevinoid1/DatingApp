@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace DatingApp.Helpers
@@ -29,6 +30,13 @@ namespace DatingApp.Helpers
             int count = await source.CountAsync();
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             return new PagedList<T>(items, count, pageNumber, pageSize);
+        }
+
+        public static PagedList<T> Create(IEnumerable<T> source, int pageNumber, int pageSize)
+        {
+            int count = source.Count();
+            var items = source.Skip((pageNumber -1) * pageSize).Take(pageSize).ToList();
+            return new PagedList<T>(items, count, pageNumber, pageSize) ;
         }
 
     }

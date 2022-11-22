@@ -51,5 +51,10 @@ namespace DatingApp.Helpers
         {
             return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
+
+        public static string GetUsername(this ClaimsPrincipal User)
+        {
+            return User.FindFirstValue(ClaimTypes.Name);
+        }
     }
 }

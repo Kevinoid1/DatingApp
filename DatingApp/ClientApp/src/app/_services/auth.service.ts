@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 
@@ -11,7 +12,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = 'https://localhost:44315/api/auth/';
+  baseUrl = environment.apiUrl;
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   currentUser: User;
@@ -25,7 +26,7 @@ export class AuthService {
   }
 
   login(model:any){
-    return this.http.post(this.baseUrl + 'login', model).pipe(
+    return this.http.post(this.baseUrl + 'auth/login', model).pipe(
       map(response =>{
         const user:any =  response;
         if(user){
@@ -44,7 +45,7 @@ export class AuthService {
   }
 
   register(model:any){
-    return this.http.post(this.baseUrl + 'register', model);
+    return this.http.post(this.baseUrl + 'auth/register', model);
   }
 
   loggedIn(){

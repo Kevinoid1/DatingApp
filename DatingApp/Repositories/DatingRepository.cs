@@ -33,6 +33,11 @@ namespace DatingApp.Repositories
             return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Id == Id);
         }
 
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+        }
+
         public async Task<PagedList<User>> GetAllUsers(UserParams userParams)
         {
             var users = _context.Users.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();
