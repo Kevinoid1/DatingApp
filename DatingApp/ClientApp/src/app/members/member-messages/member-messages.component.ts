@@ -1,6 +1,6 @@
 import { NgForm } from '@angular/forms';
 import { MessageService } from './../../_services/message.service';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Message } from 'src/app/_models/message';
 
 @Component({
@@ -8,14 +8,19 @@ import { Message } from 'src/app/_models/message';
   templateUrl: './member-messages.component.html',
   styleUrls: ['./member-messages.component.css']
 })
-export class MemberMessagesComponent implements OnInit {
+export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   @Input() messages:Message[];
   @Input() username: string;
   messageContent: string;
   userId: number;
+  messageSent = true;
   @ViewChild('messageForm', {static:false}) messageForm : NgForm
+  @ViewChild('messageBox', {static: false}) messageBox: ElementRef;
   constructor(private messageService: MessageService) { 
     this.userId = JSON.parse(localStorage.getItem('user')).userReturned.id;
+  }
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
   }
 
   ngOnInit() {
@@ -25,7 +30,15 @@ export class MemberMessagesComponent implements OnInit {
     this.messageService.sendMessage(this.username, this.messageContent).subscribe(message => {
       this.messages.push(message);
       this.messageForm.reset();
+      this.messageSent = true;
     })
+  }
+
+  scrollToBottom(){
+    if(this.messageBox && this.messageSent){
+      this.messageBox.nativeElement.scrollTop = this.messageBox.nativeElement.scrollHeight;
+      this.messageSent = false;
+    }
   }
 
   deleteMessage(id: number){

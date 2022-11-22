@@ -5,6 +5,8 @@
     gap:32px;
     --sent-background-color: hsla(197, 16%, 53%, 0.838);
     --received-background-color: hsla(164, 17%, 65%, 0.838);
+    max-height: 400px;
+    overflow: auto;
 }
 
 .chat li{

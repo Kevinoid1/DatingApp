@@ -4,7 +4,7 @@
             No messages yet. Send a message by using the message box below
         </p>
 
-        <ul class="chat" *ngIf="messages?.length > 0">
+        <ul class="chat" *ngIf="messages?.length > 0" #messageBox>
             <li *ngFor="let message of messages">
                 <div class="{{message.senderId === userId ? 'sender-wrapper' : 'recipient-wrapper'}}">
                     <div class="chat-img" [ngClass]="{'recipient-chat-img': message.senderId !== userId}">
