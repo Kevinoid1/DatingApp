@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DatingApp.DTOs;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
-using DatingApp.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,11 +13,8 @@ using System.Threading.Tasks;
 
 namespace DatingApp.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     [Authorize]
-    [ServiceFilter(typeof (LogUserLastActive))]
-    public class UserController : Controller
+    public class UserController : BaseApiController
     {
         private readonly IDatingRepository _repo;
         private readonly IMapper _mapper;

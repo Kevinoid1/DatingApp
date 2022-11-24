@@ -1,13 +1,15 @@
 using DatingApp.Data;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
+using DatingApp.Models;
 using DatingApp.Repositories;
-using DatingApp.Repositories.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,14 +34,38 @@ namespace DatingApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DatingAppContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+
+            //service filter
             services.AddScoped<LogUserLastActive>();
+
+            //cloudinary
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
+            //automapper
             services.AddAutoMapper(typeof(IDatingRepository).Assembly);
+
+            //cors
             services.AddCors();
+
+            #region identity services 
+            //use addIdentityCore since it is not an MVC and i don't need the identity pages. AddIdentity is the default for MVC that does this
+            services.AddIdentityCore<User>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddRoleValidator<RoleValidator<AppRole>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddEntityFrameworkStores<DatingAppContext>();
+
+            #endregion
+
+            //authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
             {
                 o.TokenValidationParameters = new TokenValidationParameters
@@ -49,6 +75,13 @@ namespace DatingApp
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+            });
+
+            //authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(PolicyEnum.AdminRole, pol => pol.RequireRole(RolesEnum.Admin));
+                options.AddPolicy(PolicyEnum.ModeratorRole, pol => pol.RequireRole(RolesEnum.Admin, RolesEnum.Moderator));
             });
             
             services.AddControllersWithViews();

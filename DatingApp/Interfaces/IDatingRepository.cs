@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatingApp.Repositories
+namespace DatingApp.Interfaces
 {
     public interface IDatingRepository
     {
@@ -14,13 +14,13 @@ namespace DatingApp.Repositories
         Task<User> GetUser(int Id);
         Task<User> GetUserByUsernameAsync(string username);
 
-        void Create<T>(T Entity) where T: class;
+        void Create<T>(T Entity) where T : class;
 
         Task<bool> SaveAll();
 
         //Task Update<T>(T Entity) where T: class;
 
-        void Delete<T>(T Entity) where T:class;
+        void Delete<T>(T Entity) where T : class;
 
         Task<Photo> GetPhoto(int id);
 

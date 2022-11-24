@@ -1,6 +1,7 @@
 ﻿using DatingApp.Data;
 using DatingApp.DTOs;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace DatingApp.Repositories
 
         public async Task<PagedList<LikeDto>> GetUserLikes(string predicate, int userId, PaginationParams parameters)
         {
-            var users = context.Users.OrderBy(u => u.Username).AsQueryable();
+            var users = context.Users.OrderBy(u => u.UserName).AsQueryable();
             var likes = context.UserLikes.AsQueryable();
 
             if(predicate == "liked")
@@ -41,7 +42,7 @@ namespace DatingApp.Repositories
 
             var userLikes = users.Select(u => new LikeDto
             {
-                Username = u.Username,
+                Username = u.UserName,
                 KnownAs = u.KnownAs,
                 PhotoUrl = u.Photos.Where(p => p.IsMain == true).Select(p => p.Url).FirstOrDefault(),
                 City = u.City,

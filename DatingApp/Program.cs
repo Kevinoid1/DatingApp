@@ -1,16 +1,19 @@
 using DatingApp.Data;
+using DatingApp.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace DatingApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             using (var scoped = host.Services.CreateScope())
@@ -19,8 +22,10 @@ namespace DatingApp
                 try
                 {
                     var context = services.GetRequiredService<DatingAppContext>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                     context.Database.Migrate();
-                    Seed.SeedUsers(context);
+                    await Seed.SeedUsers(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {

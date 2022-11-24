@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DatingApp.DTOs;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
-using DatingApp.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 
 namespace DatingApp.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    
     [Authorize]
-    [ServiceFilter(typeof(LogUserLastActive))]
-    public class MessageController : ControllerBase
+    public class MessageController : BaseApiController
     {
         private readonly IDatingRepository datingRepository;
         private readonly IMessageRepository messageRepository;
@@ -43,8 +41,8 @@ namespace DatingApp.Controllers
             {
                 Sender = sender,
                 Recipient = recipient,
-                SenderUsername = sender.Username,
-                RecipientUsername = recipient.Username,
+                SenderUsername = sender.UserName,
+                RecipientUsername = recipient.UserName,
                 Content = entity.Content
             };
 

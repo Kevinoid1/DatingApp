@@ -17,7 +17,7 @@ export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   @ViewChild('messageForm', {static:false}) messageForm : NgForm
   @ViewChild('messageBox', {static: false}) messageBox: ElementRef;
   constructor(private messageService: MessageService) { 
-    this.userId = JSON.parse(localStorage.getItem('user')).userReturned.id;
+    this.userId = JSON.parse(localStorage.getItem('user')).id;
   }
   ngAfterViewChecked(): void {
     this.scrollToBottom();

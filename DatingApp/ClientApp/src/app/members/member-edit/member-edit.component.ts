@@ -28,8 +28,8 @@ export class MemberEditComponent implements OnInit {
       this.user = data['user'];
       
     })
-    this.accountService.currentPhotoUrl.subscribe(photoUrl =>{
-      this.photoUrl = photoUrl;
+    this.accountService.currentUser$.subscribe(user =>{
+      this.photoUrl = user.photoUrl;
     })
   }
 

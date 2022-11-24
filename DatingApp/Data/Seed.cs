@@ -1,4 +1,6 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.Helpers;
+using DatingApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,32 +14,39 @@ namespace DatingApp.Data
 {
     public static class Seed
     {
-        public static void SeedUsers(DatingAppContext context)
+        public static async Task SeedUsers(UserManager<User> userManager, RoleManager<AppRole> roleManager)
         {
-            if (!context.Users.Any())
+            if (!userManager.Users.Any())
             {
-                var userData = File.ReadAllText("Data/UsersSeedData.json");
+                var userData = await File.ReadAllTextAsync("Data/UsersSeedData.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
+                if (users == null) return;
+
+                var roles = new List<AppRole>()
+                {
+                    new AppRole { Name = RolesEnum.Member },
+                    new AppRole { Name = RolesEnum.Admin },
+                    new AppRole { Name = RolesEnum.Moderator }
+                };
+
+                foreach (var role in roles)
+                {
+                    await roleManager.CreateAsync(role);
+                }
                 foreach (var user in users)
                 {
-                    byte[] passwordHash, passwordSalt;
-                    CreatePasswordHash("password", out passwordHash, out passwordSalt);
-                    user.PasswordHash = passwordHash;
-                    user.PasswordSalt = passwordSalt;
-                    user.Username = user.Username.ToLower();
-                    context.Users.Add(user);
-
+                    user.UserName = user.UserName.ToLower();
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await userManager.AddToRoleAsync(user, RolesEnum.Member);
                 }
-                context.SaveChanges();
-            }
-        }
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
+                var admin = new User
+                {
+                    UserName = "admin",
+                };
+
+                await userManager.CreateAsync(admin, "Pa$$w0rd");
+                await userManager.AddToRolesAsync(admin, new string[] { RolesEnum.Admin, RolesEnum.Moderator });
             }
         }
     }

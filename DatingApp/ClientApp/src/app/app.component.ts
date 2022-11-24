@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     let user: User = null;
     if(userAndToken){
        token = userAndToken.token;
-       user = userAndToken.userReturned;
+       user = userAndToken;
     }
    
     if(token){

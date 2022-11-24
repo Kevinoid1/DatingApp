@@ -35,6 +35,11 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 
 export function tokenGetter(){
   const userAndToken = JSON.parse(localStorage.getItem('user'));
@@ -70,7 +75,12 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       DateInputComponent,
       NotFoundComponent,
       ServerErrorComponent,
-      MemberMessagesComponent
+      MemberMessagesComponent,
+      AdminPanelComponent,
+      HasRoleDirective,
+      UserManagementComponent,
+      PhotoManagementComponent,
+      RolesModalComponent
       
    ],
   imports: [
@@ -109,6 +119,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
 
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [RolesModalComponent]
 })
 export class AppModule { }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatingApp.Repositories.Auth
+namespace DatingApp.Interfaces
 {
     public interface IAuthRepository
     {
@@ -13,6 +13,6 @@ namespace DatingApp.Repositories.Auth
 
         Task<User> Login(UserLoginDto user);
 
-        Task<bool> UserExists(string username);
+        //Task<bool> UserExists(string username);
     }
 }

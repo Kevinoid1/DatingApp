@@ -23,11 +23,11 @@ namespace DatingApp.Helpers
             var photos = JsonConvert.DeserializeObject<List<Photo>>(photoData);
             foreach (var user in users)
             {
-                byte[] passwordHash, passwordSalt;
-                CreatePasswordHash("password", out passwordHash, out passwordSalt);
+                //byte[] passwordHash, passwordSalt;
+                //CreatePasswordHash("password", out passwordHash, out passwordSalt);
 
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                //user.PasswordHash = passwordHash;
+                //user.PasswordSalt = passwordSalt;
                 for (int i = 0; i < photos.Count; i++)
                 {
                     modelBuilder.Entity<User>(u =>
@@ -42,15 +42,15 @@ namespace DatingApp.Helpers
 
 
         }
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        //private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        //{
+        //    using (var hmac = new HMACSHA512())
+        //    {
+        //        passwordSalt = hmac.Key;
+        //        passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            }
-        }
+        //    }
+        //}
     }
 }
 

@@ -1,3 +1,5 @@
+import { AdminGuard } from './_guards/admin.guard';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes-guard';
@@ -27,7 +29,8 @@ export const appRoutes: Routes = [
             {path: 'members/:id', component: MemberDetailComponent, resolve:{user: MemberDetailResolver}},
             {path: 'members', component: MembersListComponent, resolve: {users: MemberListResolver}},
             {path: 'lists', component:ListsComponent},
-            {path: 'messages', component: MessagesComponent}
+            {path: 'messages', component: MessagesComponent},
+            {path: 'admin', component: AdminPanelComponent, canActivate: [AdminGuard]}
         ],
         runGuardsAndResolvers: 'always'
     

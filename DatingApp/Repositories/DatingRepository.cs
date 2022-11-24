@@ -1,5 +1,6 @@
 ﻿using DatingApp.Data;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,7 +36,7 @@ namespace DatingApp.Repositories
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.UserName.ToLower() == username.ToLower());
         }
 
         public async Task<PagedList<User>> GetAllUsers(UserParams userParams)
@@ -86,7 +87,7 @@ namespace DatingApp.Repositories
 
         public async Task<User> GetUser(string username)
         {
-            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Username == username);
+            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.UserName == username);
         }
     }
 }

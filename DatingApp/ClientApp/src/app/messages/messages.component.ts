@@ -17,7 +17,7 @@ export class MessagesComponent implements OnInit {
   container = 'Unread';
   userId: number;
   constructor(private messageService:MessageService) { 
-    this.userId = JSON.parse(localStorage.getItem('user')).userReturned.id;
+    this.userId = JSON.parse(localStorage.getItem('user')).id;
   }
 
   ngOnInit() {

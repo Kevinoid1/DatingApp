@@ -25,15 +25,23 @@ export class AccountService {
       map((response: any) => {
         const user = response;
         if(user){
-          localStorage.setItem('user', JSON.stringify(user));
-          /*this observable created here never completes so remember to unsubscribe from 
-          the observable when finished  otherwise can lead to memory leaks */
-          this.currentUserSource.next(user.userReturned);
-          this.photoUrl.next(user.userReturned.photoUrl);
-          this.decodedToken = this.jwtHelper.decodeToken(user.token);
+          this.doStuff(user)
         }
       })
     )
+  }
+
+  doStuff(user){
+    this.decodedToken = JSON.parse(atob(user.token.split('.')[1]));
+    user.roles = [];
+    const roles = this.decodedToken.role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
+    localStorage.setItem('user', JSON.stringify(user));
+    /*this observable created here never completes so remember to unsubscribe from 
+    the observable when finished  otherwise can lead to memory leaks */
+    this.currentUserSource.next(user);
+    this.photoUrl.next(user.photoUrl);
+    //this.decodedToken = this.jwtHelper.decodeToken(user.token);
   }
 
   changeMemberPhoto(photoUrl:string){
@@ -50,7 +58,14 @@ export class AccountService {
   }
 
   register(model:any){
-    return this.http.post(this.baseUrl + 'auth/register', model);
+    return this.http.post(this.baseUrl + 'auth/register', model).pipe(
+      map( (response: any) => {
+        const user = response;
+        if(user){
+          this.doStuff(user);
+        }
+      })
+    );
   }
 
   loggedIn(){

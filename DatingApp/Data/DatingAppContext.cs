@@ -1,5 +1,7 @@
 ﻿using DatingApp.Helpers;
 using DatingApp.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace DatingApp.Data
 {
-    public class DatingAppContext : DbContext
+    public class DatingAppContext : IdentityDbContext<User,AppRole, int, IdentityUserClaim<int>, AppUserRole, 
+        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DatingAppContext(DbContextOptions<DatingAppContext> options):base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
 
         public DbSet<Photo> Photos { get; set; }
         public DbSet<UserLike> UserLikes { get; set; }
@@ -24,6 +27,20 @@ namespace DatingApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            //interesting. Don't do it this way because you want the entity AppRole to be required and not AppUserRole
+            //modelBuilder.Entity<AppUserRole>().HasOne(ap => ap.Role)
+            //    .WithMany(r => r.UserRoles).HasForeignKey(ap => ap.RoleId).IsRequired();
+
+            modelBuilder.Entity<AppRole>().HasMany(r => r.UserRoles)
+                .WithOne(ur => ur.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
             modelBuilder.Entity<UserLike>().HasKey(a => new { a.LoggedInUserId, a.LikedUserId });
 

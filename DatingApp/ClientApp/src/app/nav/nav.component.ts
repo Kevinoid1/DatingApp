@@ -24,7 +24,7 @@ export class NavComponent implements OnInit {
      public accountService: AccountService) { }
 
   ngOnInit() {
-    this.accountService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
+    //this.accountService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login(){
@@ -49,7 +49,7 @@ export class NavComponent implements OnInit {
     this.accountService.decodedToken = null;
     //this.accountService.setCurrentUser(null);
     this.alertify.message("Logged out");
-    this.router.navigate(['/']);
+    this.router.navigateByUrl('/');
     
   }
 

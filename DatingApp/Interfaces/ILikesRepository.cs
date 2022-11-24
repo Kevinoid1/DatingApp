@@ -4,7 +4,7 @@ using DatingApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DatingApp.Repositories
+namespace DatingApp.Interfaces
 {
     public interface ILikesRepository
     {

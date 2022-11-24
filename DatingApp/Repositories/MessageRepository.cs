@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using DatingApp.Data;
 using DatingApp.DTOs;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;

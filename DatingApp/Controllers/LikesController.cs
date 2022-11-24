@@ -1,7 +1,7 @@
 ﻿using DatingApp.DTOs;
 using DatingApp.Helpers;
+using DatingApp.Interfaces;
 using DatingApp.Models;
-using DatingApp.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,11 +10,8 @@ using System.Threading.Tasks;
 
 namespace DatingApp.Controllers
 {
-    [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
-    [ServiceFilter(typeof(LogUserLastActive))]
-    public class LikesController : ControllerBase
+    public class LikesController : BaseApiController
     {
         private readonly IDatingRepository repo;
         private readonly ILikesRepository likesRepo;
@@ -34,7 +31,7 @@ namespace DatingApp.Controllers
             var likedUser = await repo.GetUser(username);
             var sourceUser = await likesRepo.GetUserWithLikes(loggedInUserId);
 
-            if (sourceUser.Username == username) return BadRequest("You cannot like youself");
+            if (sourceUser.UserName == username) return BadRequest("You cannot like youself");
 
             if (likedUser == null) return NotFound();
             

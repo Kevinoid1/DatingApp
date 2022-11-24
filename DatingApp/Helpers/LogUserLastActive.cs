@@ -1,4 +1,4 @@
-﻿using DatingApp.Repositories;
+﻿using DatingApp.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;

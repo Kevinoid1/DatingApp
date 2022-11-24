@@ -8,6 +8,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 
@@ -25,7 +26,8 @@ import { TimeagoModule } from 'ngx-timeago';
     NgxSpinnerModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    ModalModule.forRoot()
     
   ],
   exports:[
@@ -37,7 +39,8 @@ import { TimeagoModule } from 'ngx-timeago';
     ButtonsModule,
     NgxSpinnerModule,
     BsDatepickerModule,
-    TimeagoModule
+    TimeagoModule,
+    ModalModule
   ]
 })
 export class SharedModule { }
