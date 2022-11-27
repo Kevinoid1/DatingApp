@@ -16,7 +16,7 @@ export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   messageSent = true;
   @ViewChild('messageForm', {static:false}) messageForm : NgForm
   @ViewChild('messageBox', {static: false}) messageBox: ElementRef;
-  constructor(private messageService: MessageService) { 
+  constructor(public messageService: MessageService) { 
     this.userId = JSON.parse(localStorage.getItem('user')).id;
   }
   ngAfterViewChecked(): void {
@@ -27,8 +27,7 @@ export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   }
 
   sendMessage(){
-    this.messageService.sendMessage(this.username, this.messageContent).subscribe(message => {
-      this.messages.push(message);
+    this.messageService.sendMessage(this.username, this.messageContent).then(() => {
       this.messageForm.reset();
       this.messageSent = true;
     })

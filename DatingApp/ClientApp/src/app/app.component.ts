@@ -1,3 +1,4 @@
+import { PresenceService } from './_services/presence.service';
 import { AccountService } from './_services/account.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -11,7 +12,7 @@ import { User } from './_models/user';
 export class AppComponent implements OnInit {
   jwtHelper = new JwtHelperService();
 
-  constructor(private accountService: AccountService){
+  constructor(private accountService: AccountService, private presenceService: PresenceService){
 
   }
   ngOnInit(): void {
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
     if(user){
       //this.authService.currentUser = JSON.parse(user);
       this.accountService.setCurrentUser(user);
+      this.presenceService.createConnection(user);
       this.accountService.changeMemberPhoto(user.photoUrl)
     }
   }

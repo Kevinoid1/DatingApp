@@ -3,6 +3,7 @@ using DatingApp.Helpers;
 using DatingApp.Interfaces;
 using DatingApp.Models;
 using DatingApp.Repositories;
+using DatingApp.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DatingApp
 {
@@ -38,6 +40,7 @@ namespace DatingApp
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddSingleton<PresenceTracker>();
 
             //service filter
             services.AddScoped<LogUserLastActive>();
@@ -75,6 +78,25 @@ namespace DatingApp
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+
+                //for signalR,  we send token as query string and tell the application how to retrieve the token.
+                //token is sent as query string because websockets does not support authorization header as of now
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             //authorization
@@ -90,6 +112,8 @@ namespace DatingApp
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -133,7 +157,8 @@ namespace DatingApp
             }
 
             app.UseRouting();
-            app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            //added allow credentials for signalr mode of sending token
+            app.UseCors(o => o.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -142,6 +167,9 @@ namespace DatingApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapHub<PresenceHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
 
             app.UseSpa(spa =>

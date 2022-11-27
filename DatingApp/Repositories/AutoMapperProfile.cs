@@ -37,6 +37,8 @@ namespace DatingApp.Repositories
                 .ForMember(dest => dest.UnreadMessageCount, opt => opt.MapFrom(src =>
                 src.Recipient.MessagesReceived.Where(m => m.DateRead == null && m.RecipientUsername == username).Count()));
 
+            CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
+
         }
     }
 }

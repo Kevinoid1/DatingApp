@@ -9,6 +9,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -27,7 +28,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
     TimeagoModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+    })
     
   ],
   exports:[
@@ -40,7 +44,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     NgxSpinnerModule,
     BsDatepickerModule,
     TimeagoModule,
-    ModalModule
+    ModalModule,
+    ToastrModule
   ]
 })
 export class SharedModule { }

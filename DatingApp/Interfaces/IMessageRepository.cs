@@ -9,6 +9,11 @@ namespace DatingApp.Interfaces
 {
     public interface IMessageRepository
     {
+        void AddGroup(Group group);
+        void RemoveConnection(Connection connection);
+        Task<Group> GetGroupByName(string groupName);
+        Task<Group> GetGroupForConnection(string connectionId);
+        Task<Connection> GetConnectionById(string connectionId);
         void AddMessage(Message message);
         void RemoveMessage(Message message);
         Task<Message> GetMessageAsync(int id);

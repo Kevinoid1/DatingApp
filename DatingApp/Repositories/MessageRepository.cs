@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace DatingApp.Repositories
@@ -24,9 +25,31 @@ namespace DatingApp.Repositories
             mapper = _mapper;
         }
 
+        public void AddGroup(Group group)
+        {
+            context.Groups.Add(group);
+        }
+
         public void AddMessage(Message message)
         {
             context.Messages.Add(message);
+        }
+
+        public async Task<Connection> GetConnectionById(string connectionId)
+        {
+           return await context.Connections.FindAsync(connectionId);
+        }
+
+        public async Task<Group> GetGroupByName(string groupName)
+        {
+            return await context.Groups.Include(g => g.Connections).SingleOrDefaultAsync(g => g.Name == groupName);
+        }
+
+        public async Task<Group> GetGroupForConnection(string connectionId)
+        {
+            return await context.Groups.Include(g => g.Connections)
+                .Where(g => g.Connections.Any(c => c.ConnectionId == connectionId))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Message> GetMessageAsync(int id)
@@ -51,7 +74,8 @@ namespace DatingApp.Repositories
             {
                 foreach (var msg in unreadMessages)
                 {
-                    msg.DateRead = DateTime.Now; //mark the messages as read
+                    //msg.DateRead = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc); //mark the messages as read and specify as UTC
+                    msg.DateRead = DateTime.UtcNow; //will specify as utc with automapper.
                 }
 
                 await context.SaveChangesAsync();
@@ -76,8 +100,7 @@ namespace DatingApp.Repositories
                             || m.SenderUsername.ToLower() == messageParams.Username.ToLower() && m.SenderDeleted == false);
 
 
-            var source = query.ProjectTo<MessageDto>(mapper.ConfigurationProvider, new {username = messageParams.Username})
-                               ;
+            var source = query.ProjectTo<MessageDto>(mapper.ConfigurationProvider, new {username = messageParams.Username});
 
             var msgLst = new List<MessageDto>();
             foreach (var msg in await source.ToListAsync())
@@ -94,6 +117,11 @@ namespace DatingApp.Repositories
 
 
             return PagedList<MessageDto>.Create(msgLst, messageParams.PageNumber, messageParams.PageSize);
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            context.Connections.Remove(connection);
         }
 
         public void RemoveMessage(Message message)

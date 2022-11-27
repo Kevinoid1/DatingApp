@@ -1,3 +1,4 @@
+import { PresenceService } from './presence.service';
 import { map } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { User } from './../_models/user';
@@ -18,14 +19,15 @@ export class AccountService {
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private presenceService:PresenceService) { }
 
   login(model){
     return this.http.post(`${this.baseUrl}auth/login`, model).pipe(
       map((response: any) => {
         const user = response;
         if(user){
-          this.doStuff(user)
+          this.doStuff(user);
+          this.presenceService.createConnection(user);
         }
       })
     )
@@ -55,6 +57,7 @@ export class AccountService {
   logout(){
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.presenceService.stopConnection();
   }
 
   register(model:any){
@@ -63,6 +66,7 @@ export class AccountService {
         const user = response;
         if(user){
           this.doStuff(user);
+          this.presenceService.createConnection(user);
         }
       })
     );
